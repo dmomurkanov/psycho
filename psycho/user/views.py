@@ -1,4 +1,3 @@
-from django.shortcuts import render
 # Create your views here.
 from rest_framework.mixins import (
     CreateModelMixin, ListModelMixin, RetrieveModelMixin, UpdateModelMixin
@@ -8,18 +7,23 @@ from rest_framework.viewsets import GenericViewSet
 from .models import User
 from .serializers import UserSerializer
 
-from django.http import HttpResponse, JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.parsers import JSONParser
 
-from rest_framework import status
-from rest_framework.decorators import api_view
+# from drf_spectacular.utils import extend_schema
+from rest_framework.views import APIView
 from rest_framework.response import Response
-
+from rest_framework.permissions import IsAuthenticated
 class UserViewSet(GenericViewSet, CreateModelMixin,ListModelMixin, RetrieveModelMixin, UpdateModelMixin):
       serializer_class = UserSerializer
       queryset = User.objects.all()
+      permission_classes = (IsAuthenticated,)
 
+
+
+class ProtectedView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        return Response({"message": "This is a protected endpoint!"})
 '''
       @api_view(['GET', 'POST'])
       def user_list(request):

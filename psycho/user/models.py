@@ -1,8 +1,3 @@
-from Tools.demo.mcast import sender
-from django.contrib.auth.models import AbstractUser
-from django.db import models
-from django.db.models.signals import post_save
-from django.dispatch import receiver
 from django.db import models
 
 
@@ -20,8 +15,10 @@ class User(models.Model):
     age = models.IntegerField("Возраст")
     social_status = models.CharField("Социальный статус", choices=SOCIAL_STATUS)
     school = models.CharField("Учебное заведение:", max_length=100, null=True, blank=True)
+    my_order = models.PositiveIntegerField(default=0, blank=False, null=False)
 
     class Meta:
         verbose_name = "Пользователь"
         verbose_name_plural = "Пользователи"
+        ordering = ['my_order']
 
